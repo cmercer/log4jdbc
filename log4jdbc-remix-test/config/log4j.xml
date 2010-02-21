@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+  <!--
+       The unit test modifies these loggers dynamically to log to a string
+  -->
+  <logger name="jdbc.sqlonly" />
+  <logger name="jdbc.sqltiming" />
+  <logger name="jdbc.audit" />
+  <logger name="jdbc.resultset" />
+  <logger name="jdbc.resultsettable" />
+  <logger name="jdbc.connection" />
+  <logger name="log4jdbc.debug" />
+  <root>
+    <level value="warn"/>
+  </root>
+</log4j:configuration>
