@@ -46,12 +46,17 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
    */
   private final Logger resultSetLogger = LoggerFactory.getLogger("jdbc.resultset");
 
-  /**
+
+/**
    * Logger that shows only the SQL that is occuring
    */
   private final Logger sqlOnlyLogger = LoggerFactory.getLogger("jdbc.sqlonly");
 
-  /**
+  public Logger getSqlOnlyLogger() {
+	return sqlOnlyLogger;
+}
+
+/**
    * Logger that shows the SQL timing, post execution
    */
   private final Logger sqlTimingLogger = LoggerFactory.getLogger("jdbc.sqltiming");
@@ -140,7 +145,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
    *                   String representation for Object.  Return types this will
    *                   be null for void return types.
    */
-  public void methodReturned(Spy spy, String methodCall, String returnMsg)
+  public void methodReturned(Spy spy, String methodCall, Object returnMsg, Object object, Object... methodParams)
   {
     String classType = spy.getClassType();
     Logger logger=ResultSetSpy.classTypeDescription.equals(classType)?
@@ -208,7 +213,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
    * @param methodCall a description of the name and call parameters of the method that generated the SQL.
    * @param sql        sql that occured.
    */
-  public void sqlOccured(Spy spy, String methodCall, String sql)
+  public String sqlOccured(Spy spy, String methodCall, String sql)
   {
     if (!DriverSpy.DumpSqlFilteringOn || shouldSqlBeLogged(sql))
     {
@@ -222,8 +227,28 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
       {
         sqlOnlyLogger.info(sql);
       }
+      return sql;
     }
+    return "";
   }
+  
+  @Override
+    public String sqlOccured(StatementSpy spy, String methodCall, String[] sqls) {
+        
+      StringBuffer batchReport = new StringBuffer("batching " + sqls.length + " statements:");
+      int fieldSize = (""+sqls.length).length();
+      String sql;
+      for (int i = 0; i < sqls.length; i++) {
+        sql = sqls[i];
+        batchReport.append("\n");
+        batchReport.append(Utilities.rightJustify(fieldSize,""+(++i)));
+        batchReport.append(":  ");
+        batchReport.append(sql);
+      }
+      sql = batchReport.toString();
+      sqlOccured(spy, sql, methodCall);
+      return sql;
+    }
 
   /**
    * Break an SQL statement up into multiple lines in an attempt to make it
@@ -505,4 +530,16 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
       connectionLogger.info(spy.getConnectionNumber() + ". Connection closed");
     }
   }
+
+  @Override
+  public boolean isResultSetCollectionEnabled() {
+    return false;
+  }
+
+  @Override
+  public void resultSetCollected(ResultSetCollector resultSetCollector) {
+    // Not supported by this log delegator
+    return;
+  }
+  
 }

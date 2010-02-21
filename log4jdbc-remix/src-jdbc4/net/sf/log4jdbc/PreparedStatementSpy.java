@@ -50,7 +50,7 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
   /**
    * holds list of bind variables for tracing
    */
-  protected final List argTrace = new ArrayList();
+  protected final List<String> argTrace = new ArrayList<String>();
 
   // a way to turn on and off type help...
   // todo:  make this a configurable parameter
@@ -148,7 +148,7 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
 
   protected void reportAllReturns(String methodCall, String msg)
   {
-    log.methodReturned(this, methodCall, msg);
+    log.methodReturned(this, methodCall, msg, null, null);
   }
 
   /**

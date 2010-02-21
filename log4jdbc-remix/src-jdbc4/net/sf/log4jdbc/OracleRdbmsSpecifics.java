@@ -1,5 +1,6 @@
 /**
  * Copyright 2007-2009 Arthur Blake
+ * Copyright 2010      Tim Azzopardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +16,11 @@
  */
 package net.sf.log4jdbc;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 /**
  * RDBMS specifics for the Oracle DB.
  *
@@ -26,4 +32,54 @@ class OracleRdbmsSpecifics extends RdbmsSpecifics
   {
     super();
   }
+  
+  private static final DateFormat dateFormat = 
+      new SimpleDateFormat("yyyy-MM-dd");
+
+    private static final DateFormat timestampFormat = 
+      new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+    /**
+     * Format an Object that is being bound to a PreparedStatement parameter, for display. The goal is to reformat the
+     * object in a format that can be re-run against the native SQL client of the particular Rdbms being used.  This
+     * class should be extended to provide formatting instances that format objects correctly for different RDBMS
+     * types.
+     *
+     * @param object jdbc object to be formatted.
+     * @return formatted dump of the object.
+     */
+    String formatParameterObject(Object object)
+    {
+      if (object == null)
+      {
+        return "NULL";
+      }
+      else
+      {
+        if (object instanceof String)
+        {
+          // todo: need to handle imbedded quotes??
+          return "'" + object + "'";
+        }
+        else if (object instanceof Date)
+        {
+          return "DATE '" + dateFormat.format(object) + "'";
+        }
+        else if (object instanceof Timestamp)
+        {
+          return "TIMESTAMP '" + timestampFormat.format(object) + "'";
+        }
+        else if (object instanceof Boolean)
+        {
+          return DriverSpy.DumpBooleanAsTrueFalse?
+              ((Boolean)object).booleanValue()?"true":"false"
+              :((Boolean)object).booleanValue()?"1":"0";
+        }
+        else
+        {
+          return object.toString();
+        }
+      }
+    }
+
 }

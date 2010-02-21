@@ -16,6 +16,9 @@
 package net.sf.log4jdbc;
 
 /**
+ * 
+ * From http://code.google.com/p/log4jdbc/issues/detail?id=5
+ * 
  * A provider for a SpyLogDelegator.  This allows a single switch point to abstract
  * away which logging system to use for spying on JDBC calls.
  *
@@ -26,6 +29,8 @@ package net.sf.log4jdbc;
  */
 public class SpyLogFactory
 {
+  public static final String LOG_DELEGATOR_PROPERTY = "net.sf.log4jdbc.delegator";
+  
   /**
    * Do not allow instantiation.  Access is through static method.
    */
@@ -34,17 +39,53 @@ public class SpyLogFactory
   /**
    * The logging system of choice.
    */
-  private static final SpyLogDelegator logger = new Slf4jSpyLogDelegator();
-  //new Log4jSpyLogDelegator();
+  private static SpyLogDelegator logger;
+  
+  static {
+    loadLogDelegator();
+  }
 
   /**
    * Get the default SpyLogDelegator for logging to the logger.
    *
    * @return the default SpyLogDelegator for logging to the logger.
    */
-  public static SpyLogDelegator getSpyLogDelegator()
-  {
+  public static SpyLogDelegator getSpyLogDelegator() {
+    assertLogDelegatorIsSet();
     return logger;
   }
+  
+  /**
+   * Optionally override the {@link SpyLogDelegator} implementation  
+   * and thus take more control over the logging.<br/>
+   * Note: It is the caller's responsibility to make sure this is set before
+   * JDBC activity occurs and to ensure thread safety.
+   * 
+   * @param logDelegator the log delegator responsible for actually logging
+   * JDBC events.
+   */
+  public static void setSpyLogDelegator(SpyLogDelegator logDelegator) {
+    if (logDelegator == null) {
+      throw new IllegalArgumentException("log4jdbc: logDelegator cannot be null.");
+    }
+    logger = logDelegator;
+  }
+  
+  private static void loadLogDelegator() {
+    String className = System.getProperty(LOG_DELEGATOR_PROPERTY, 
+        Slf4jSpyLogDelegator.class.getName());
+    try {
+      logger = (SpyLogDelegator) Class.forName(className).newInstance();
+    } 
+    catch (Exception ex) {
+      System.err.println("log4jdbc: Failed to load log delegator className " + 
+          className + ". Exception: " + ex);
+    }
+  }
+  
+  private static void assertLogDelegatorIsSet() {
+    if (logger == null) {
+      throw new IllegalStateException("log4jdbc: the log delegator is not set.");
+    }
+  }
 }
-

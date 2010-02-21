@@ -46,7 +46,7 @@ public class CallableStatementSpy extends PreparedStatementSpy implements Callab
 {
   protected void reportAllReturns(String methodCall, String msg)
   {
-    log.methodReturned(this, methodCall, msg);
+    log.methodReturned(this, methodCall, msg, null, null);
   }
 
   /**

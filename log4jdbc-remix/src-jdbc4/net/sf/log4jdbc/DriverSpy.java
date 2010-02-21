@@ -365,7 +365,7 @@ public class DriverSpy implements Driver
     // time.  The driver can spy on any driver type, it's just a little bit
     // easier to configure log4jdbc if it's one of these types!
 
-    Set subDrivers = new TreeSet();
+    Set<String> subDrivers = new TreeSet<String>();
     subDrivers.add("oracle.jdbc.driver.OracleDriver");
     subDrivers.add("com.sybase.jdbc2.jdbc.SybDriver");
     subDrivers.add("net.sourceforge.jtds.jdbc.Driver");
@@ -414,7 +414,7 @@ public class DriverSpy implements Driver
     // instantiate all the supported drivers and remove
     // those not found
     String driverClass;
-    for (Iterator i = subDrivers.iterator(); i.hasNext();)
+    for (Iterator<String> i = subDrivers.iterator(); i.hasNext();)
     {
       driverClass = (String) i.next();
       try
@@ -438,8 +438,10 @@ public class DriverSpy implements Driver
 
     /** create lookup Map for specific rdbms formatters */
     rdbmsSpecifics = new HashMap();
-    rdbmsSpecifics.put("oracle.jdbc.driver.OracleDriver",
-      new OracleRdbmsSpecifics());
+    rdbmsSpecifics.put("oracle.jdbc.driver.OracleDriver", new OracleRdbmsSpecifics());
+    rdbmsSpecifics.put("oracle.jdbc.OracleDriver", new OracleRdbmsSpecifics());
+    rdbmsSpecifics.put("Oracle JDBC driver", new OracleRdbmsSpecifics());
+    
     rdbmsSpecifics.put("net.sourceforge.jtds.jdbc.Driver", sqlServer);
     rdbmsSpecifics.put("com.microsoft.jdbc.sqlserver.SQLServerDriver",
       sqlServer);
@@ -456,7 +458,7 @@ public class DriverSpy implements Driver
    * @param conn JDBC connection to get RdbmsSpecifics for.
    * @return RdbmsSpecifics for the given connection.
    */
-  static RdbmsSpecifics getRdbmsSpecifics(Connection conn)
+  public static RdbmsSpecifics getRdbmsSpecifics(Connection conn)
   {
     String driverName = "";
     try

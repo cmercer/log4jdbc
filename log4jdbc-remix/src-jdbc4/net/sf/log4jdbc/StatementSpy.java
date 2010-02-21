@@ -22,8 +22,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Wraps a Statement and reports method calls, returns and exceptions.
@@ -144,7 +144,7 @@ public class StatementSpy implements Statement, Spy
    */
   protected void reportAllReturns(String methodCall, String msg)
   {
-    log.methodReturned(this, methodCall, msg);
+    log.methodReturned(this, methodCall, msg, realStatement, null);
   }
 
   /**
@@ -327,6 +327,18 @@ public class StatementSpy implements Statement, Spy
   {
     log.sqlOccured(this, methodCall, sql);
   }
+  
+  /**
+   * Report SQL batch for logging.
+   *
+   * @param sqls       the SQL being run
+   * @param methodCall the name of the method that was running the SQL
+    * @return string representation of batch
+   */
+  private String reportSqlBatch(String[] sqls, String methodCall) {
+      return log.sqlOccured(this, methodCall, sqls);
+  }
+
 
   private void _reportSqlTiming(long execTime, String sql, String methodCall)
   {
@@ -433,7 +445,7 @@ public class StatementSpy implements Statement, Spy
    * Tracking of current batch (see addBatch, clearBatch and executeBatch)
    * //todo: should access to this List be synchronized?
    */
-  protected List currentBatch = new ArrayList();
+  protected List<String> currentBatch = new ArrayList<String>();
 
   public void addBatch(String sql) throws SQLException
   {
@@ -501,23 +513,8 @@ public class StatementSpy implements Statement, Spy
   {
     String methodCall = "executeBatch()";
 
-    int j=currentBatch.size();
-    StringBuffer batchReport = new StringBuffer("batching " + j + " statements:");
-
-    int fieldSize = (""+j).length();
-
-    String sql;
-    for (int i=0; i < j;)
-    {
-      sql = (String) currentBatch.get(i);
-      batchReport.append("\n");
-      batchReport.append(Utilities.rightJustify(fieldSize,""+(++i)));
-      batchReport.append(":  ");
-      batchReport.append(sql);
-    }
-
-    sql = batchReport.toString();
-    reportSql(sql, methodCall);
+    String sql = reportSqlBatch((String[])currentBatch.toArray(new String[0]), methodCall);
+    
     long tstart = System.currentTimeMillis();
 
     int[] updateResults;
@@ -535,7 +532,8 @@ public class StatementSpy implements Statement, Spy
     return (int[])reportReturn(methodCall,updateResults);
   }
 
-  public void setFetchSize(int rows) throws SQLException
+
+public void setFetchSize(int rows) throws SQLException
   {
     String methodCall = "setFetchSize(" + rows + ")";
     try
@@ -984,19 +982,21 @@ public class StatementSpy implements Statement, Spy
     }
   }
 
-  public <T> T unwrap(Class<T> iface) throws SQLException {
-    String methodCall = "unwrap(" + (iface==null?"null":iface.getName()) + ")";
-    try
-    {
-      //todo: double check this logic
-      return (T)reportReturn(methodCall, (iface != null && (iface == Connection.class || iface == Spy.class))?(T)this:realStatement.unwrap(iface));
-    }
-    catch (SQLException s)
-    {
-      reportException(methodCall,s);
-      throw s;
-    }
-  }
+	public <T> T unwrap(Class<T> iface) throws SQLException {
+		String methodCall = "unwrap("
+				+ (iface == null ? "null" : iface.getName()) + ")";
+		try {
+			// todo: double check this logic
+			boolean b = iface != null
+					&& (iface == Connection.class || iface == Spy.class);
+			T value = b ? (T) this : realStatement.unwrap(iface);
+			Object reportReturn = reportReturn(methodCall, value);
+			return (T) reportReturn;
+		} catch (SQLException s) {
+			reportException(methodCall, s);
+			throw s;
+		}
+	}
 
   public boolean isWrapperFor(Class<?> iface) throws SQLException
   {
