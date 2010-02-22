@@ -72,13 +72,18 @@ public class DefaultResultSetCollector implements ResultSetCollector {
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}
-			int columnCount = getColumnCount();
-			colNameToColIndex = new HashMap<String, Integer>(columnCount);
-			for (int column = 1; column <= columnCount; column++) {
-				colNameToColIndex.put(getColumnName(column).toLowerCase(), column);
-			}
+			// TODO tidy this up!
+			setupColNameToColIndexMap();
 		}
 	}
+
+  private void setupColNameToColIndexMap() {
+    int columnCount = getColumnCount();
+    colNameToColIndex = new HashMap<String, Integer>(columnCount);
+    for (int column = 1; column <= columnCount; column++) {
+    	colNameToColIndex.put(getColumnName(column).toLowerCase(), column);
+    }
+  }
 
 
 
@@ -126,6 +131,8 @@ public class DefaultResultSetCollector implements ResultSetCollector {
     if ("getMetaData()".equals(methodCall)) {
       // If the client code calls getMetaData then we don't have to 
       metaData = (ResultSetMetaData) returnValue;
+      // TODO tidy this up!
+      setupColNameToColIndexMap();
     }
 		return false;
 	}
