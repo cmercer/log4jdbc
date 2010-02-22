@@ -37,8 +37,6 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 
-import org.lazyluke.log4jdbc.tools.ResultSetCollectorPrinter;
-
 /**
  * Wraps a ResultSet and reports method calls, returns and exceptions.
  *

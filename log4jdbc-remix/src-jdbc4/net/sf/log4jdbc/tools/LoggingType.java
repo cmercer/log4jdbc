@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package org.lazyluke.log4jdbc.tools;
+package net.sf.log4jdbc.tools;
 
 public enum LoggingType {
     // SINGLE_LINE is good for human readable SQL

@@ -144,7 +144,7 @@ public class StatementSpy implements Statement, Spy
    */
   protected void reportAllReturns(String methodCall, String msg)
   {
-    log.methodReturned(this, methodCall, msg, realStatement, null);
+    log.methodReturned(this, methodCall, msg, realStatement, (Object[])null);
   }
 
   /**

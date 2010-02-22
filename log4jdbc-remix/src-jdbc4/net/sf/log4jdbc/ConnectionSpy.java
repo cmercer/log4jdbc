@@ -190,7 +190,7 @@ public class ConnectionSpy implements Connection, Spy
 
   protected void reportAllReturns(String methodCall, String returnValue)
   {
-    log.methodReturned(this, methodCall, returnValue, null, null);
+    log.methodReturned(this, methodCall, returnValue, null, (Object[])null);
   }
 
   private boolean reportReturn(String methodCall, boolean value)

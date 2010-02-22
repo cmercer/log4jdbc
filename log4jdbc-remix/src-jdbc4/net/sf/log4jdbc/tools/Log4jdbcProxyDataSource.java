@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package org.lazyluke.log4jdbc.tools;
+package net.sf.log4jdbc.tools;
 
 import java.io.PrintWriter;
 import java.sql.Connection;

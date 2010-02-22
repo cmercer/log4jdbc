@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package org.lazyluke.log4jdbc.tools;
+package net.sf.log4jdbc.tools;
 
 import net.sf.log4jdbc.ResultSetCollector;
 import net.sf.log4jdbc.Slf4jSpyLogDelegator;

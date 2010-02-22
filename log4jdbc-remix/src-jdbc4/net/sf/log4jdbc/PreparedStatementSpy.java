@@ -148,7 +148,7 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
 
   protected void reportAllReturns(String methodCall, String msg)
   {
-    log.methodReturned(this, methodCall, msg, null, null);
+    log.methodReturned(this, methodCall, msg, null, (Object[])null);
   }
 
   /**
