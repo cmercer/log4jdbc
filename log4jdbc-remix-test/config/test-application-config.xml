@@ -13,10 +13,10 @@
         <property name="password" value="tiger" />
     </bean>
     
-    <bean id="dataSource" class="org.lazyluke.log4jdbc.tools.Log4jdbcProxyDataSource">
+    <bean id="dataSource" class="net.sf.log4jdbc.tools.Log4jdbcProxyDataSource">
       <constructor-arg ref="dataSourceSpied" />
       <property name="logFormatter">
-        <bean class="org.lazyluke.log4jdbc.tools.Log4JdbcCustomFormatter">
+        <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
           <property name="loggingType" value="MULTI_LINE" />
           <property name="margin" value="20" />
         </bean>
