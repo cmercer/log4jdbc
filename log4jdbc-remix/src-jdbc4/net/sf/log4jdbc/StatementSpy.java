@@ -451,7 +451,7 @@ public class StatementSpy implements Statement, Spy
   {
     String methodCall = "addBatch(" + sql + ")";
 
-    currentBatch.add(StatementSqlWarning + sql);
+    currentBatch.add(DriverSpy.StatementUsageWarn?StatementSqlWarning:"" + sql);
     try
     {
       realStatement.addBatch(sql);

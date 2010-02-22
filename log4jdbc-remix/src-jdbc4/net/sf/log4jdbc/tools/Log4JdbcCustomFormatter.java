@@ -81,7 +81,7 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
       final String whereClause = " where ";
       final String andClause = " and ";
       final String subSelectClauseS = "\\(select";
-      final String subSelectClauseR = "(select";
+      final String subSelectClauseR = " (select";
       final String indent = "          ";
       sql = sql.replaceAll(fromClause, "\n" + margin + indent + fromClause);
       sql = sql.replaceAll(whereClause, "\n" + margin + indent + whereClause);
