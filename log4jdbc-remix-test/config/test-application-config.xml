@@ -18,7 +18,7 @@
       <property name="logFormatter">
         <bean class="org.lazyluke.log4jdbc.tools.Log4JdbcCustomFormatter">
           <property name="loggingType" value="MULTI_LINE" />
-          <property name="margin" value="80" />
+          <property name="margin" value="20" />
         </bean>
       </property>
     </bean>
