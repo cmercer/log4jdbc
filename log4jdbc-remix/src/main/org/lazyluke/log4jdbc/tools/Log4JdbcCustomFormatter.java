@@ -26,37 +26,49 @@ import org.slf4j.LoggerFactory;
 
 public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
 
-	/**
-	 * Logger that shows the results in a table
-	 */
-	private final Logger resultSetTableLogger = LoggerFactory
-			.getLogger("jdbc.resultsettable");	  
+  private LoggingType loggingType = LoggingType.DISABLED;    
+
+  private String margin = "";
+  
+  public int getMargin() {
+    return margin.length();
+  }
+
+
+  public void setMargin(int n) {
+    margin = String.format("%1$#" + n + "s", "");
+  }
+
+  /**
+   * Logger that shows the results in a table
+   */
+  private final Logger resultSetTableLogger = LoggerFactory
+      .getLogger("jdbc.resultsettable");    
+
+
+  public Log4JdbcCustomFormatter() {
+  }
+
 	
 	@Override
 	public boolean isJdbcLoggingEnabled() {
 		return super.isJdbcLoggingEnabled() || resultSetTableLogger.isErrorEnabled();
 	}
-
 	
 	@Override
 	public boolean isResultSetCollectionEnabled() {
 	  return resultSetTableLogger.isInfoEnabled();
 	}
-	
-  public Log4JdbcCustomFormatter(LoggingType loggingType) {
-    Log4JdbcCustomFormatter.loggingType = loggingType;
-  }
-
-  private static LoggingType loggingType = LoggingType.DISABLED;    
 
 
-  String margin = "\t\t";
+
 
   @Override
   public String sqlOccured(Spy spy, String methodCall, String rawSql) {
     if (loggingType == LoggingType.DISABLED) {
       return "";
     }
+    
 
     // Remove all existing cr lf, unless MULTI_LINE
     if (loggingType != LoggingType.MULTI_LINE) {
@@ -97,17 +109,17 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
     return s;
   }
 
-  public static LoggingType getLoggingType() {
+  public LoggingType getLoggingType() {
     return loggingType;
   }
 
-  public static void setLoggingType(LoggingType loggingType) {
-    Log4JdbcCustomFormatter.loggingType = loggingType;
+  public void setLoggingType(LoggingType loggingType) {
+    this.loggingType = loggingType;
   }
   
   @Override
   public void resultSetCollected(ResultSetCollector resultSetCollector) {
-    new ResultSetCollectorPrinter(resultSetTableLogger)
+    new ResultSetCollectorPrinter(resultSetTableLogger,margin)
     .printResultSet(resultSetCollector);
   }
   

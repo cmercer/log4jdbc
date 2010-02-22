@@ -24,9 +24,11 @@ import org.slf4j.Logger;
 public class ResultSetCollectorPrinter {
 
 	private Logger log;
+  private String margin;
 	
-	public ResultSetCollectorPrinter(Logger log) {
+	public ResultSetCollectorPrinter(Logger log, String margin) {
 		this.log = log;
+		this.margin = margin;
 	}
 	
 	public void printResultSet(ResultSetCollector resultSetCollector) {
@@ -103,8 +105,6 @@ public class ResultSetCollectorPrinter {
 		return String.format("%1$#" + n + "s", s);
 	}
 
-	// TODO
-	private String margin = "\t\t";
 
 	void println() {
 		log.info(margin + sb.toString());

@@ -13,25 +13,14 @@
         <property name="password" value="tiger" />
     </bean>
     
-    <!-- 
-        To enable SQL logging,  (Better than hibernate trace).
-        (1) Create a project dependency on log4jdbc project: (svn://rtsvn1/gastrack/log4jdbc)
-        (2) Uncomment this bean in sessionFactory-config.xml. 
-        (3) Rename the real dataSource bean to dataSourceSpied
-        (4) Start the server.
-
-        arg1: the name of the datasource bean to spy on 
-        arg2: SINGLE_LINE is good for human readable SQL
-        arg2: MULTI_LINE is better for human readable SQL
-        arg2: SINGLE_LINE_TWO_COLUMNS is good for pasting to excel to get table names in first column and full sql in second
-
-    -->
-
     <bean id="dataSource" class="org.lazyluke.log4jdbc.tools.Log4jdbcProxyDataSource">
-        <constructor-arg ref="dataSourceSpied" />
-        <constructor-arg value="MULTI_LINE" />
-        <!--  
- 		-->
+      <constructor-arg ref="dataSourceSpied" />
+      <property name="logFormatter">
+        <bean class="org.lazyluke.log4jdbc.tools.Log4JdbcCustomFormatter">
+          <property name="loggingType" value="MULTI_LINE" />
+          <property name="margin" value="80" />
+        </bean>
+      </property>
     </bean>
     
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">

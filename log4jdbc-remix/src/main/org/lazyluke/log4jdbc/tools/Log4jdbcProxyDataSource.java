@@ -24,6 +24,7 @@ import javax.sql.DataSource;
 
 import net.sf.log4jdbc.ConnectionSpy;
 import net.sf.log4jdbc.DriverSpy;
+import net.sf.log4jdbc.SpyLogDelegator;
 import net.sf.log4jdbc.SpyLogFactory;
 
 /**
@@ -39,16 +40,12 @@ public class Log4jdbcProxyDataSource implements DataSource {
             this.realDataSource = realDataSource; 
     } 
 
-    /**
-     * Convenience constructor to make spring config easier 
-     * @param realDataSource
-     * @param loggingType
-     */
-    public Log4jdbcProxyDataSource(DataSource realDataSource, LoggingType loggingType) 
-    { 
-            this.realDataSource = realDataSource;
-            SpyLogFactory.setSpyLogDelegator(new Log4JdbcCustomFormatter(loggingType));
-    } 
+    public SpyLogDelegator getLogFormatter() {
+      return SpyLogFactory.getSpyLogDelegator();
+    }
+    public void setLogFormatter(SpyLogDelegator spyLogDelegator) {
+      SpyLogFactory.setSpyLogDelegator(spyLogDelegator);
+    }
     @Override
     public Connection getConnection() throws SQLException 
     { 
