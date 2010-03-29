@@ -1,5 +1,5 @@
 /**
- * Copyright 2007-2009 Arthur Blake
+ * Copyright 2007-2010 Arthur Blake
  * Copyright 2010      Tim Azzopardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
  */
 package net.sf.log4jdbc;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,28 +56,19 @@ class OracleRdbmsSpecifics extends RdbmsSpecifics
       }
       else
       {
-        if (object instanceof String)
+        if (object instanceof Date)
         {
-          // todo: need to handle imbedded quotes??
-          return "'" + object + "'";
-        }
-        else if (object instanceof Date)
-        {
+          // Use SQL92 standard date literal http://sqlzoo.net/sql92.html#date_literal
           return "DATE '" + dateFormat.format(object) + "'";
         }
         else if (object instanceof Timestamp)
         {
+          // Use SQL92 standard timestamp literal which Oracle is happy with
           return "TIMESTAMP '" + timestampFormat.format(object) + "'";
-        }
-        else if (object instanceof Boolean)
-        {
-          return DriverSpy.DumpBooleanAsTrueFalse?
-              ((Boolean)object).booleanValue()?"true":"false"
-              :((Boolean)object).booleanValue()?"1":"0";
         }
         else
         {
-          return object.toString();
+            return super.formatParameterObject(object);
         }
       }
     }
