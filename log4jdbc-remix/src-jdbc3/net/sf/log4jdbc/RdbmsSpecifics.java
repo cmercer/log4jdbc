@@ -1,5 +1,5 @@
 /**
- * Copyright 2007-2009 Arthur Blake
+ * Copyright 2007-2010 Arthur Blake
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package net.sf.log4jdbc;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
