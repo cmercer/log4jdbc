@@ -2,7 +2,7 @@
 
 # *************************************************************************************************
 # *                                                                                               *
-# *  Copyright 2007-2009 Arthur Blake                                                             *
+# *  Copyright 2007-2010 Arthur Blake                                                             *
 # *                                                                                               *
 # *  Licensed under the Apache License, Version 2.0 (the "License");                              *
 # *  you may not use this file except in compliance with the License.                             *
@@ -25,4 +25,4 @@
 # *                                                                                               *
 # *************************************************************************************************
 
-java -Xmx1024m -classpath ../build/log4jdbc3-1.2alpha3.jar net.sf.log4jdbc.PostLogProfilerProcessor $@
+java -Xmx1024m -classpath ../build/log4jdbc3-1.2beta1.jar net.sf.log4jdbc.PostLogProfilerProcessor $@
