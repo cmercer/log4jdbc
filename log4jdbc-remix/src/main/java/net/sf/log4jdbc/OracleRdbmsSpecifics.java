@@ -40,32 +40,24 @@ class OracleRdbmsSpecifics extends RdbmsSpecifics
     private static final DateFormat timestampFormat = 
       new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-    /**
-     * Format an Object that is being bound to a PreparedStatement parameter, for display. The goal is to reformat the
-     * object in a format that can be re-run against the native SQL client of the particular Rdbms being used.  This
-     * class should be extended to provide formatting instances that format objects correctly for different RDBMS
-     * types.
-     *
-     * @param object jdbc object to be formatted.
-     * @return formatted dump of the object.
-     */
+
     String formatParameterObject(Object object)
     {
       if (object == null)
       {
-        return "NULL";
+        return super.formatParameterObject(object);
       }
       else
       {
-        if (object instanceof Date)
+        if (object instanceof Timestamp)
+        {
+          // Use SQL92 standard timestamp literal which Oracle 10/11 is happy with
+          return "TIMESTAMP '" + timestampFormat.format(object) + "'";
+        }
+        else if (object instanceof Date)
         {
           // Use SQL92 standard date literal http://sqlzoo.net/sql92.html#date_literal
           return "DATE '" + dateFormat.format(object) + "'";
-        }
-        else if (object instanceof Timestamp)
-        {
-          // Use SQL92 standard timestamp literal which Oracle is happy with
-          return "TIMESTAMP '" + timestampFormat.format(object) + "'";
         }
         else
         {

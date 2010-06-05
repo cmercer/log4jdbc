@@ -22,8 +22,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Wraps a Statement and reports method calls, returns and exceptions.
@@ -585,7 +585,10 @@ public void setFetchSize(int rows) throws SQLException
     }
     catch (SQLException s)
     {
-      reportException(methodCall, s);
+      if (!DriverSpy.SuppressGetGeneratedKeysException)
+      {
+          reportException(methodCall, s);
+      }
       throw s;
     }
   }
