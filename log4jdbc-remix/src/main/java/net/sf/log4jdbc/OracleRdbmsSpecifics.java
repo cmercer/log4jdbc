@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
  * RDBMS specifics for the Oracle DB.
  *
  * @author Arthur Blake
+ * @author Tim Azzopardi use SQL92 syntax
  */
 class OracleRdbmsSpecifics extends RdbmsSpecifics
 {

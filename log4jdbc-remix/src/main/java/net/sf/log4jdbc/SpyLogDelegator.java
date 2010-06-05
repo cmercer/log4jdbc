@@ -124,6 +124,14 @@ public interface SpyLogDelegator
    */
   public boolean isResultSetCollectionEnabled();
 
+  /**
+   * Determine whether the logger is expecting results sets to be collected AND any unread result set values read explicitly  
+   *
+   * @return true if the logger is expecting results sets to be collected
+   */
+  public boolean isResultSetCollectionEnabledWithUnreadValueFillIn();
+
+  
   
   /**
    * Called whenever result set has been collected

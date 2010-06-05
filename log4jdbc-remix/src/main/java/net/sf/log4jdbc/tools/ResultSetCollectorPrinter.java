@@ -24,13 +24,13 @@ import org.slf4j.Logger;
 public class ResultSetCollectorPrinter {
 
 	private Logger log;
-  private String margin;
-	
+	private String margin;
+
 	public ResultSetCollectorPrinter(Logger log, String margin) {
 		this.log = log;
 		this.margin = margin;
 	}
-	
+
 	public void printResultSet(ResultSetCollector resultSetCollector) {
 
 		int columnCount = resultSetCollector.getColumnCount();
@@ -82,7 +82,9 @@ public class ResultSetCollectorPrinter {
 				int colIndex = 0;
 				print("|");
 				for (Object v : printRow) {
-					print(padRight(v==null?"null":v.toString(), maxLength[colIndex]) + "|");
+					print(padRight(v == null ? "null" : v.toString(),
+							maxLength[colIndex])
+							+ "|");
 					colIndex++;
 				}
 				println();
@@ -105,13 +107,13 @@ public class ResultSetCollectorPrinter {
 		return String.format("%1$#" + n + "s", s);
 	}
 
-
 	void println() {
 		log.info(margin + sb.toString());
 		sb.setLength(0);
 	}
 
 	private StringBuffer sb = new StringBuffer();
+
 	void print(String s) {
 		sb.append(s);
 	}
