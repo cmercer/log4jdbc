@@ -233,7 +233,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
     }
 
     @Override
-    public String sqlOccured(StatementSpy spy, String methodCall, String[] sqls)
+    public String sqlOccured(Spy spy, String methodCall, String[] sqls)
     {
 
         StringBuffer batchReport = new StringBuffer("batching " + sqls.length + " statements:");

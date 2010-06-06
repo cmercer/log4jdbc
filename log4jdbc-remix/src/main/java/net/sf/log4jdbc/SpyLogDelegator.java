@@ -82,7 +82,7 @@ public interface SpyLogDelegator
    * @param sqls       the sql batch that occured.
    * @return           must return a string representation of the batch for reporting timing and exceptions
    */
-  public String sqlOccured(StatementSpy spy, String methodCall, String[] sqls);
+  public String sqlOccured(Spy spy, String methodCall, String[] sqls);
 
   
   /**
