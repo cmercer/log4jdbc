@@ -98,7 +98,7 @@ public class DefaultResultSetCollector implements ResultSetCollector {
     /*
      * (non-Javadoc)
      * 
-     * @seenet.sf.log4jdbc.IResultSetCollector#methodReturned(net.sf.log4jdbc.
+     * @see net.sf.log4jdbc.ResultSetCollector#methodReturned(net.sf.log4jdbc.
      * ResultSetSpy, java.lang.String, java.lang.Object, java.lang.Object,
      * java.lang.Object)
      */
@@ -129,6 +129,8 @@ public class DefaultResultSetCollector implements ResultSetCollector {
                 return true;
             }
         }
+        // TODO: if prev() called, warn about no support for reverse cursors
+        
         if ("getMetaData()".equals(methodCall)) {
             // If the client code calls getMetaData then we don't have to
             metaData = (ResultSetMetaData) returnValue;

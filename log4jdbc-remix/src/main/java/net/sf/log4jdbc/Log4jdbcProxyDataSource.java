@@ -24,7 +24,50 @@ import javax.sql.DataSource;
 
 
 /**
+ * A proxy datasource that can be used to wrap a real data source allowing log4jdbc to do its work on the real 
+ * data source.
  * Inspired by http://groups.google.com/group/log4jdbc/browse_thread/thread/0706611d1b85e210
+ * 
+ * This can be useful in a Spring context. Imagine your spring context includes this datasource definition
+ * 
+ * <code><pre>
+ *   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+ *     <property name="driverClass" value="${datasource.driverClassName}"/>
+ *     <property name="jdbcUrl" value="${datasource.url}"/>
+ *     <property name="user" value="${datasource.username}"/>
+ *     <property name="password" value="${datasource.password}"/>
+ *     <property name="initialPoolSize" value="${datasource.initialPoolSize}" />
+ *     <property name="minPoolSize" value="${datasource.minPoolSize}" />
+ *     <property name="maxPoolSize" value="${datasource.maxPoolSize}" />
+ *     <property name="maxStatements" value="${datasource.maxStatements}" />
+ *   </bean>
+ * </pre></code>
+ * 
+ * You can get log4jdbc to work on this using the following config changes
+ * 
+ * <code><pre>
+ *  <bean id="dataSourceSpied" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+ *      <property name="driverClass" value="${datasource.driverClassName}"/>
+ *       <property name="jdbcUrl" value="${datasource.url}"/>
+ *       <property name="user" value="${datasource.username}"/>
+ *       <property name="password" value="${datasource.password}"/>
+ *       <property name="initialPoolSize" value="${datasource.initialPoolSize}" />
+ *       <property name="minPoolSize" value="${datasource.minPoolSize}" />
+ *       <property name="maxPoolSize" value="${datasource.maxPoolSize}" />
+ *       <property name="maxStatements" value="${datasource.maxStatements}" />
+ *   </bean>
+ *   
+ *   <bean id="dataSource" class="net.sf.log4jdbc.tools.Log4jdbcProxyDataSource">
+ *     <constructor-arg ref="dataSourceSpied" />
+ *     <property name="logFormatter">
+ *       <bean class="net.sf.log4jdbc.Log4JdbcCustomFormatter">
+ *         <property name="loggingType" value="MULTI_LINE" />
+ *         <property name="margin" value="20" />
+ *       </bean>
+ *    </property>
+ *  </bean>
+ * </pre></code>
+ * 
  * 
  * @author tim.azzopardi
  *
@@ -39,6 +82,10 @@ public class Log4jdbcProxyDataSource implements DataSource {
     public SpyLogDelegator getLogFormatter() {
       return SpyLogFactory.getSpyLogDelegator();
     }
+    /**
+     * Set a custom SpyLogDelegator (default is usually Slf4jSpyLogDelegator)
+     * @param spyLogDelegator
+     */
     public void setLogFormatter(SpyLogDelegator spyLogDelegator) {
       SpyLogFactory.setSpyLogDelegator(spyLogDelegator);
     }
