@@ -31,15 +31,15 @@ import javax.sql.DataSource;
  * This can be useful in a Spring context. Imagine your spring context includes this datasource definition
  * 
  * <code><pre>
- *   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
- *     <property name="driverClass" value="${datasource.driverClassName}"/>
- *     <property name="jdbcUrl" value="${datasource.url}"/>
- *     <property name="user" value="${datasource.username}"/>
- *     <property name="password" value="${datasource.password}"/>
- *     <property name="initialPoolSize" value="${datasource.initialPoolSize}" />
- *     <property name="minPoolSize" value="${datasource.minPoolSize}" />
- *     <property name="maxPoolSize" value="${datasource.maxPoolSize}" />
- *     <property name="maxStatements" value="${datasource.maxStatements}" />
+ *  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+ *      <property name="driverClass" value="${datasource.driverClassName}"/>
+ *       <property name="jdbcUrl" value="${datasource.url}"/>
+ *       <property name="user" value="${datasource.username}"/>
+ *       <property name="password" value="${datasource.password}"/>
+ *       <property name="initialPoolSize" value="${datasource.initialPoolSize}" />
+ *       <property name="minPoolSize" value="${datasource.minPoolSize}" />
+ *       <property name="maxPoolSize" value="${datasource.maxPoolSize}" />
+ *       <property name="maxStatements" value="${datasource.maxStatements}" />
  *   </bean>
  * </pre></code>
  * 

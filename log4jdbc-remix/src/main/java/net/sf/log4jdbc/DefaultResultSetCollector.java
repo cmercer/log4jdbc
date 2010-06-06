@@ -74,7 +74,7 @@ public class DefaultResultSetCollector implements ResultSetCollector {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            // TODO tidy this up!
+            //: Tim TODO tidy this up!
             setupColNameToColIndexMap();
         }
     }
@@ -129,7 +129,7 @@ public class DefaultResultSetCollector implements ResultSetCollector {
                 return true;
             }
         }
-        // TODO: if prev() called, warn about no support for reverse cursors
+        // TODO: Tim: if prev() called, warn about no support for reverse cursors
         
         if ("getMetaData()".equals(methodCall)) {
             // If the client code calls getMetaData then we don't have to
@@ -190,7 +190,6 @@ public class DefaultResultSetCollector implements ResultSetCollector {
                         } else {
                             row.set(colIndex, NULL_RESULT_SET_VAL);
                         }
-                        // resultSetSpy.getRealResultSet();
                     }
                     colIndex++;
                 }
