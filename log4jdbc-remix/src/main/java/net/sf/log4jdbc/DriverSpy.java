@@ -89,6 +89,7 @@ import java.util.TreeSet;
  * underlying real driver), and in most applications their is only one database.
  *
  * @author Arthur Blake
+ * @author Tim Azzopardi One line change to add support for JDBC name for Oracle
  */
 public class DriverSpy implements Driver
 {
@@ -524,8 +525,7 @@ public class DriverSpy implements Driver
     rdbmsSpecifics = new HashMap();
     rdbmsSpecifics.put("oracle.jdbc.driver.OracleDriver", oracle);
     rdbmsSpecifics.put("oracle.jdbc.OracleDriver", oracle);
-    rdbmsSpecifics.put("Oracle JDBC driver", oracle);
-    
+    rdbmsSpecifics.put("Oracle JDBC driver", oracle);    
     rdbmsSpecifics.put("net.sourceforge.jtds.jdbc.Driver", sqlServer);
     rdbmsSpecifics.put("com.microsoft.jdbc.sqlserver.SQLServerDriver",
       sqlServer);
@@ -542,7 +542,7 @@ public class DriverSpy implements Driver
    * @param conn JDBC connection to get RdbmsSpecifics for.
    * @return RdbmsSpecifics for the given connection.
    */
-  public static RdbmsSpecifics getRdbmsSpecifics(Connection conn)
+  static RdbmsSpecifics getRdbmsSpecifics(Connection conn)
   {
     String driverName = "";
     try

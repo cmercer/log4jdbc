@@ -31,6 +31,7 @@ import java.util.ArrayList;
  * jdbc 4 version
  *
  * @author Arthur Blake
+ * @author Tim Azzopardi changes to support result set logging and custom sql formatting
  */
 public class StatementSpy implements Statement, Spy
 {
@@ -144,7 +145,7 @@ public class StatementSpy implements Statement, Spy
    */
   protected void reportAllReturns(String methodCall, String msg)
   {
-    log.methodReturned(this, methodCall, msg, realStatement, (Object[])null);
+    log.methodReturned(this, methodCall, msg, getRealStatement(), (Object[])null);
   }
 
   /**
@@ -339,7 +340,6 @@ public class StatementSpy implements Statement, Spy
       return log.sqlOccured(this, methodCall, sqls);
   }
 
-
   private void _reportSqlTiming(long execTime, String sql, String methodCall)
   {
     log.sqlTimingOccured(this, execTime, methodCall, sql);
@@ -445,7 +445,7 @@ public class StatementSpy implements Statement, Spy
    * Tracking of current batch (see addBatch, clearBatch and executeBatch)
    * //todo: should access to this List be synchronized?
    */
-  protected List<String> currentBatch = new ArrayList<String>();
+  protected List currentBatch = new ArrayList();
 
   public void addBatch(String sql) throws SQLException
   {
@@ -532,8 +532,7 @@ public class StatementSpy implements Statement, Spy
     return (int[])reportReturn(methodCall,updateResults);
   }
 
-
-public void setFetchSize(int rows) throws SQLException
+  public void setFetchSize(int rows) throws SQLException
   {
     String methodCall = "setFetchSize(" + rows + ")";
     try
@@ -587,7 +586,7 @@ public void setFetchSize(int rows) throws SQLException
     {
       if (!DriverSpy.SuppressGetGeneratedKeysException)
       {
-          reportException(methodCall, s);
+        reportException(methodCall, s);
       }
       throw s;
     }
@@ -985,21 +984,19 @@ public void setFetchSize(int rows) throws SQLException
     }
   }
 
-	public <T> T unwrap(Class<T> iface) throws SQLException {
-		String methodCall = "unwrap("
-				+ (iface == null ? "null" : iface.getName()) + ")";
-		try {
-			// todo: double check this logic
-			boolean b = iface != null
-					&& (iface == Connection.class || iface == Spy.class);
-			T value = b ? (T) this : realStatement.unwrap(iface);
-			Object reportReturn = reportReturn(methodCall, value);
-			return (T) reportReturn;
-		} catch (SQLException s) {
-			reportException(methodCall, s);
-			throw s;
-		}
-	}
+  public <T> T unwrap(Class<T> iface) throws SQLException {
+    String methodCall = "unwrap(" + (iface==null?"null":iface.getName()) + ")";
+    try
+    {
+      //todo: double check this logic
+      return (T)reportReturn(methodCall, (iface != null && (iface == Connection.class || iface == Spy.class))?(T)this:realStatement.unwrap(iface));
+    }
+    catch (SQLException s)
+    {
+      reportException(methodCall,s);
+      throw s;
+    }
+  }
 
   public boolean isWrapperFor(Class<?> iface) throws SQLException
   {

@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package net.sf.log4jdbc.tools;
+package net.sf.log4jdbc;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -22,10 +22,6 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import net.sf.log4jdbc.ConnectionSpy;
-import net.sf.log4jdbc.DriverSpy;
-import net.sf.log4jdbc.SpyLogDelegator;
-import net.sf.log4jdbc.SpyLogFactory;
 
 /**
  * Inspired by http://groups.google.com/group/log4jdbc/browse_thread/thread/0706611d1b85e210

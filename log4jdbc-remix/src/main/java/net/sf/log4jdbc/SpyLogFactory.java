@@ -16,9 +16,6 @@
 package net.sf.log4jdbc;
 
 /**
- * 
- * From http://code.google.com/p/log4jdbc/issues/detail?id=5
- * 
  * A provider for a SpyLogDelegator.  This allows a single switch point to abstract
  * away which logging system to use for spying on JDBC calls.
  *
@@ -26,11 +23,10 @@ package net.sf.log4jdbc;
  * numerous java logging systems, simply and easily.
  *
  * @author Arthur Blake
+ * @author Tim Azzopardi Allow the SpyLogDelegator to be set
  */
 public class SpyLogFactory
 {
-  public static final String LOG_DELEGATOR_PROPERTY = "net.sf.log4jdbc.delegator";
-  
   /**
    * Do not allow instantiation.  Access is through static method.
    */
@@ -39,19 +35,16 @@ public class SpyLogFactory
   /**
    * The logging system of choice.
    */
-  private static SpyLogDelegator logger;
-  
-  static {
-    loadLogDelegator();
-  }
+  private static SpyLogDelegator logger = new Slf4jSpyLogDelegator();
+  //new Log4jSpyLogDelegator();
 
   /**
    * Get the default SpyLogDelegator for logging to the logger.
    *
    * @return the default SpyLogDelegator for logging to the logger.
    */
-  public static SpyLogDelegator getSpyLogDelegator() {
-    assertLogDelegatorIsSet();
+  public static SpyLogDelegator getSpyLogDelegator()
+  {
     return logger;
   }
   
@@ -71,21 +64,4 @@ public class SpyLogFactory
     logger = logDelegator;
   }
   
-  private static void loadLogDelegator() {
-    String className = System.getProperty(LOG_DELEGATOR_PROPERTY, 
-        Slf4jSpyLogDelegator.class.getName());
-    try {
-      logger = (SpyLogDelegator) Class.forName(className).newInstance();
-    } 
-    catch (Exception ex) {
-      System.err.println("log4jdbc: Failed to load log delegator className " + 
-          className + ". Exception: " + ex);
-    }
-  }
-  
-  private static void assertLogDelegatorIsSet() {
-    if (logger == null) {
-      throw new IllegalStateException("log4jdbc: the log delegator is not set.");
-    }
-  }
 }

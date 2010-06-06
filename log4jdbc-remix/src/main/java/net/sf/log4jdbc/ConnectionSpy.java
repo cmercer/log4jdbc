@@ -44,6 +44,7 @@ import java.util.Set;
  * This version is for jdbc 4.
  *
  * @author Arthur Blake
+ * @author Tim Azzopardi minor change to support result set tracing
  */
 public class ConnectionSpy implements Connection, Spy
 {
@@ -190,7 +191,7 @@ public class ConnectionSpy implements Connection, Spy
 
   protected void reportAllReturns(String methodCall, String returnValue)
   {
-    log.methodReturned(this, methodCall, returnValue, null, (Object[])null);
+    log.methodReturned(this, methodCall, returnValue, getRealConnection(), (Object[])null);
   }
 
   private boolean reportReturn(String methodCall, boolean value)

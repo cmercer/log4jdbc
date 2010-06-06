@@ -21,7 +21,7 @@ package net.sf.log4jdbc;
  * of any given logging system from log4jdbc.
  *
  * @author Arthur Blake
- * @author Tim Azzopardi minor changes
+ * @author Tim Azzopardi minor changes for supporting result set tracing
  */
 public interface SpyLogDelegator
 {
@@ -31,7 +31,6 @@ public interface SpyLogDelegator
    * @return true if any of the jdbc or sql loggers are enabled at error level or higher.
    */
   public boolean isJdbcLoggingEnabled();
-
 
   /**
    * Called when a spied upon method throws an Exception.
@@ -50,8 +49,8 @@ public interface SpyLogDelegator
    *
    * @param spy        the Spy wrapping the class that called the method that returned.
    * @param methodCall a description of the name and call parameters of the method that returned.
-   * @param returnValue  return value from the method call, this will be null for void return types.
-   * @param targetObject the relevant object (E..g. a CallableStatement, ResultSet etc) 
+   * @param returnValue  return value from the method call, null for void return types.
+   * @param targetObject the target object method call (E.g. a CallableStatement, ResultSet etc) 
    * @param methodParams the params passed to the method
    */
   public void methodReturned(Spy spy, String methodCall, Object returnValue, Object targetObject, Object... methodParams);
@@ -70,7 +69,7 @@ public interface SpyLogDelegator
    * @param spy        the Spy wrapping the class where the SQL occured.
    * @param methodCall a description of the name and call parameters of the method that generated the SQL.
    * @param sql        sql that occured.
-   * @return           string representation for reporting timing and exceptions 
+   * @return           the (possibly reformatted) sql
    */
   public String sqlOccured(Spy spy, String methodCall, String sql);
 
@@ -80,10 +79,9 @@ public interface SpyLogDelegator
    * @param spy        the Spy wrapping the class where the SQL occured.
    * @param methodCall a description of the name and call parameters of the method that generated the SQL.
    * @param sqls       the sql batch that occured.
-   * @return           must return a string representation of the batch for reporting timing and exceptions
+   * @return           the (possibly reformatted) sql string for the whole batch
    */
   public String sqlOccured(Spy spy, String methodCall, String[] sqls);
-
   
   /**
    * Similar to sqlOccured, but reported after SQL executes and used to report timing stats on the SQL
@@ -116,7 +114,6 @@ public interface SpyLogDelegator
    */
   public void debug(String msg);
 
-
   /**
    * Determine whether the logger is expecting results sets to be collected
    *
@@ -130,8 +127,6 @@ public interface SpyLogDelegator
    * @return true if the logger is expecting results sets to be collected
    */
   public boolean isResultSetCollectionEnabledWithUnreadValueFillIn();
-
-  
   
   /**
    * Called whenever result set has been collected

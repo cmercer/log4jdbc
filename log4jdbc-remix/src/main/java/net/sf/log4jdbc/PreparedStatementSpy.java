@@ -43,6 +43,7 @@ import java.util.List;
  * Wraps a PreparedStatement and reports method calls, returns and exceptions.
  *
  * @author Arthur Blake
+ * @author Tim Azzopardi minor change to support result set tracing
  */
 public class PreparedStatementSpy extends StatementSpy implements PreparedStatement
 {
@@ -50,7 +51,7 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
   /**
    * holds list of bind variables for tracing
    */
-  protected final List<String> argTrace = new ArrayList<String>();
+  protected final List argTrace = new ArrayList();
 
   // a way to turn on and off type help...
   // todo:  make this a configurable parameter
@@ -148,7 +149,7 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
 
   protected void reportAllReturns(String methodCall, String msg)
   {
-    log.methodReturned(this, methodCall, msg, null, (Object[])null);
+    log.methodReturned(this, methodCall, msg, getRealStatement(), (Object[])null);
   }
 
   /**

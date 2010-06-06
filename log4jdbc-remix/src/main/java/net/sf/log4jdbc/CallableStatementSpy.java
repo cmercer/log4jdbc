@@ -41,12 +41,13 @@ import java.util.Map;
  * Wraps a CallableStatement and reports method calls, returns and exceptions.
  *
  * @author Arthur Blake
+ * @author Tim Azzopardi minor changes for supporting result set tracing
  */
 public class CallableStatementSpy extends PreparedStatementSpy implements CallableStatement
 {
   protected void reportAllReturns(String methodCall, String msg)
   {
-    log.methodReturned(this, methodCall, msg, null, (Object[])null);
+    log.methodReturned(this, methodCall, msg, getRealStatement(), (Object[])null);
   }
 
   /**
