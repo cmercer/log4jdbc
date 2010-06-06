@@ -96,7 +96,7 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
     }
 
     @Override
-    public String sqlOccured(StatementSpy spy, String methodCall, String[] sqls) {
+    public String sqlOccured(Spy spy, String methodCall, String[] sqls) {
         String s = "";
         for (int i = 0; i < sqls.length; i++) {
             s += sqlOccured(spy, methodCall, sqls[i]) + String.format("%n");
