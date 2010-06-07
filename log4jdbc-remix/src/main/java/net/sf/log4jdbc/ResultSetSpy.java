@@ -25,9 +25,9 @@ import java.sql.Clob;
 import java.sql.Date;
 import java.sql.NClob;
 import java.sql.Ref;
-import java.sql.RowId;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.SQLXML;
@@ -75,7 +75,7 @@ public class ResultSetSpy implements ResultSet, Spy
   }
 
   /**
-   * Report (for logging) that a method returned.  All the other reportReturn methods are conveniance methods that call
+   * Report (for logging) that a method returned.  All the other reportReturn methods are convenience methods that call
    * this method.
    *
    * @param methodCall description of method call and arguments passed to it that returned.
@@ -90,7 +90,6 @@ public class ResultSetSpy implements ResultSet, Spy
       if (finished)
       {
         log.resultSetCollected(resultSetCollector);
-        // TODO: Tim does JDBC support multiple result sets e.g. from the same stored proc? 
         resultSetCollector.reset();
       }
     }
