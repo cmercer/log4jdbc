@@ -16,19 +16,17 @@
  */
 package net.sf.log4jdbc.tools;
 
-import net.sf.log4jdbc.ResultSetCollector;
 import net.sf.log4jdbc.Slf4jSpyLogDelegator;
 import net.sf.log4jdbc.Spy;
-import net.sf.log4jdbc.StatementSpy;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
 
     private LoggingType loggingType = LoggingType.DISABLED;
 
     private String margin = "";
+
+    private String sqlPrefix = "SQL:";
+
 
     public int getMargin() {
         return margin.length();
@@ -38,28 +36,11 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
         margin = String.format("%1$#" + n + "s", "");
     }
 
-    /**
-     * Logger that shows the results in a table
-     */
-    private final Logger resultSetTableLogger = LoggerFactory.getLogger("jdbc.resultsettable");
 
     public Log4JdbcCustomFormatter() {
     }
 
-    @Override
-    public boolean isJdbcLoggingEnabled() {
-        return super.isJdbcLoggingEnabled() || resultSetTableLogger.isErrorEnabled();
-    }
 
-    @Override
-    public boolean isResultSetCollectionEnabled() {
-        return resultSetTableLogger.isInfoEnabled();
-    }
-
-    @Override
-    public boolean isResultSetCollectionEnabledWithUnreadValueFillIn() {
-        return resultSetTableLogger.isDebugEnabled();
-    }
     
     @Override
     public String sqlOccured(Spy spy, String methodCall, String rawSql) {
@@ -79,11 +60,10 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
             final String andClause = " and ";
             final String subSelectClauseS = "\\(select";
             final String subSelectClauseR = " (select";
-            final String indent = "          ";
-            sql = sql.replaceAll(fromClause, "\n" + margin + indent + fromClause);
-            sql = sql.replaceAll(whereClause, "\n" + margin + indent + whereClause);
-            sql = sql.replaceAll(andClause, "\n" + margin + indent + andClause);
-            sql = sql.replaceAll(subSelectClauseS, "\n" + margin + indent + subSelectClauseR);
+            sql = sql.replaceAll(fromClause, "\n" + margin + fromClause);
+            sql = sql.replaceAll(whereClause, "\n" + margin + whereClause);
+            sql = sql.replaceAll(andClause, "\n" + margin + andClause);
+            sql = sql.replaceAll(subSelectClauseS, "\n" + margin + subSelectClauseR);
         }
         if (loggingType == LoggingType.SINGLE_LINE_TWO_COLUMNS) {
             if (sql.startsWith("select")) {
@@ -91,7 +71,7 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
                 sql = from + "\t" + sql;
             }
         }
-        getSqlOnlyLogger().info(margin + "SQL:" + sql);
+        getSqlOnlyLogger().info(sqlPrefix + sql);
         return sql;
     }
 
@@ -112,9 +92,14 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
         this.loggingType = loggingType;
     }
 
-    @Override
-    public void resultSetCollected(ResultSetCollector resultSetCollector) {
-        new ResultSetCollectorPrinter(resultSetTableLogger, margin).printResultSet(resultSetCollector);
+    public String getSqlPrefix()
+    {
+        return sqlPrefix;
+    }
+
+    public void setSqlPrefix(String sqlPrefix)
+    {
+        this.sqlPrefix = sqlPrefix;
     }
 
 }
