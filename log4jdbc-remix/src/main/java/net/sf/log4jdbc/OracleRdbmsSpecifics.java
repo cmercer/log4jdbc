@@ -18,13 +18,11 @@ package net.sf.log4jdbc;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.text.DateFormat;
 
 /**
  * RDBMS specifics for the Oracle DB.
  *
  * @author Arthur Blake
- * @author Tim Azzopardi use SQL92 syntax for date and timestamp
  */
 class OracleRdbmsSpecifics extends RdbmsSpecifics
 {
@@ -33,21 +31,17 @@ class OracleRdbmsSpecifics extends RdbmsSpecifics
     super();
   }
 
-  private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-  private static final DateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
   String formatParameterObject(Object object)
   {
     if (object instanceof Timestamp)
     {
-      // Use SQL92 standard timestamp literal which Oracle 10/11 is happy with
-      return "TIMESTAMP '" + timestampFormat.format(object) + "'";
+      return "to_timestamp('" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS").
+        format(object) + "', 'mm/dd/yyyy hh24:mi:ss.ff3')";
     }
     else if (object instanceof Date)
     {
-      // Use SQL92 standard date literal http://sqlzoo.net/sql92.html#date_literal
-      return "DATE '" + dateFormat.format(object) + "'";
+      return "to_date('" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").
+        format(object) + "', 'mm/dd/yyyy hh24:mi:ss')";
     }
     else
     {
