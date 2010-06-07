@@ -57,15 +57,9 @@ import javax.sql.DataSource;
  *       <property name="maxStatements" value="${datasource.maxStatements}" />
  *   </bean>
  *   
- *   <bean id="dataSource" class="net.sf.log4jdbc.tools.Log4jdbcProxyDataSource">
+ *   <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
  *     <constructor-arg ref="dataSourceSpied" />
- *     <property name="logFormatter">
- *       <bean class="net.sf.log4jdbc.Log4JdbcCustomFormatter">
- *         <property name="loggingType" value="MULTI_LINE" />
- *         <property name="margin" value="20" />
- *       </bean>
- *    </property>
- *  </bean>
+ *   </bean>
  * </pre></code>
  * 
  * 
