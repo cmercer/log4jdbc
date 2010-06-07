@@ -17,20 +17,46 @@ package net.sf.log4jdbc;
 
 import java.util.List;
 
+/**
+ * Collect a result set, ultimately available from getRow().
+ * A ResultSetSpy instance may call a ResultSetCollector instance's methodReturned and preMethod
+ * as and when appropriate. The ResultSetCollector is then expected to build a simple representation 
+ * of the rows and columns in getRow()/getColumnCount()/getColumnName().
+ * @author Tim Azzopardi
+ */
 public interface ResultSetCollector {
 
+  /**
+   * Expected to be called by a ResultSetSpy for all jdbc methods.
+   * @return true if the result set is complete (next() returns false)
+   */
   public boolean methodReturned(ResultSetSpy resultSetSpy,
-      String methodCall, Object returnValue, Object targetObject,
-      Object... methodParams);
+          String methodCall, Object returnValue, Object targetObject,
+          Object... methodParams);
 
+  /**
+   * Expected to be called by a ResultSetSpy for prior to the execution of all jdbc methods.
+   */
   public void preMethod(ResultSetSpy resultSetSpy, String methodCall, Object... methodParams);
   
+  /**
+   * @return the result set objects
+   */
   public List<List<Object>> getRows();
 
+  /**
+   * @return the result set column count
+   */
   public int getColumnCount();
 
+  /**
+   * @return the result set column name for a given column number via the result set meta data
+   */
   public String getColumnName(int column);
 
+  /**
+   * Clear the result set so far.
+   */
   public void reset();
 
 

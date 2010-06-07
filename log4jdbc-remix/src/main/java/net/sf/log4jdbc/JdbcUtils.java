@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.sf.log4jdbc.tools;
+package net.sf.log4jdbc;
 
 import java.sql.Blob;
 import java.sql.Clob;
