@@ -130,8 +130,6 @@ public interface SpyLogDelegator
   
   /**
    * Called whenever result set has been collected
-   *
-   * @return true if the logger is expecting results sets to be collected
    */ 
   public void resultSetCollected(ResultSetCollector resultSetCollector);
 
