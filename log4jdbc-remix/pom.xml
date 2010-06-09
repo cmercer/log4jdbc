@@ -1,11 +1,24 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.sf</groupId>
+	<groupId>org.lazyluke</groupId>
 	<artifactId>log4jdbc-remix</artifactId>
 	<name>log4jdbc-remix</name>
-	<version>0.1</version>
+	<description>experimental fork of log4jdbc</description>
+	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
+	<url>http://code.google.com/p/log4jdbc-remix</url>
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:svn:http://log4jdbc-remix.googlecode.com/svn/trunk/</connection>
+		<developerConnection>scm:svn:https://log4jdbc-remix.googlecode.com/svn/trunk/</developerConnection>
+		<url>http://code.google.com/p/log4jdbc-remix/source/browse/</url>
+	</scm>
 	<build>
 		<plugins>
 			<plugin>
@@ -35,6 +48,19 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<reporting>
@@ -42,7 +68,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.1.1</version>				
+				<version>2.1.1</version>
 				<configuration>
 					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
@@ -65,7 +91,34 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.10</version>
-			<scope>runtime</scope>
 		</dependency>
-	</dependencies>	
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
