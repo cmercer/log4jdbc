@@ -4,7 +4,7 @@
 	<artifactId>log4jdbc-remix</artifactId>
 	<name>log4jdbc-remix</name>
 	<description>experimental fork of log4jdbc</description>
-	<version>0.2.0.1</version>
+	<version>0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<url>http://code.google.com/p/log4jdbc-remix</url>
 	<parent>
@@ -20,9 +20,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:svn:http://svn.sonatype.org/spice/tags/0.2.0.1</connection>
-		<developerConnection>scm:svn:https://svn.sonatype.org/spice/tags/0.2.0.1</developerConnection>
-		<url>scm:svn:https://svn.sonatype.org/spice/tags/0.2.0.1</url>
+		<connection>scm:svn:http://log4jdbc-remix.googlecode.com/svn/trunk/</connection>
+		<developerConnection>scm:svn:https://log4jdbc-remix.googlecode.com/svn/trunk/</developerConnection>
+		<url>http://code.google.com/p/log4jdbc-remix/source/browse/</url>
 	</scm>
 	<build>
 		<plugins>
