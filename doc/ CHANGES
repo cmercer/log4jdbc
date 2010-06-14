@@ -1,0 +1,17 @@
+2010-06-14 0.2.4
+
+o synced with log4jdbc 1.2 beta 2 Release 
+
+o updated licenses and readme 
+
+o removed superfluous lib folder 
+
+o Added a DataDource proxy that can be plugged into the spring 
+configuration so that log4jdbc can be used. 
+ 
+o Added a new logger, resultSetTableLogger, to SpyLogFactory. If resultSetTableLogger is enabled then ResultSetSpy uses a 
+  "ResultSetCollector" to collect the result sets. Each result set is printed as a table  end of the result set. 
+
+o SpyLogFactory can override the default SpyLogDelegator so that a custom sql formatter can be used.  
+
+o Created a custom formatter to format the sql  

@@ -1,3 +1,5 @@
+PLEASE IGNORE THESE INSTUCTIONS FOR log4jdbc-remix: Use the maven2 pom.xml file to build.
+
 To build log4jdbc, you must have Ant 1.6.5 or later installed,
 and JDK 1.4 and JDK 1.6 installed.
 

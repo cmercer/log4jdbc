@@ -46,7 +46,7 @@
   </appender>
 
   <!--
-       The Following 5 logs can be turned on and off while the server is running
+       The Following logs can be turned on and off while the server is running
        LIVE in order to trace the SQL and/or all JDBC coming out of the application.
 
        To turn a log on, set the level value to INFO or DEBUG (to see class name and
@@ -84,6 +84,15 @@
     <appender-ref ref="jdbc-appender"/>
   </logger>
   
+  <!-- log4jdbc-remix option log the jdbc results as a table, 
+       if the application does not call ResultSet#getMetaData then log4jdbc-remix will
+       If the level is debug then any unread result values are read explicitly 
+       -->
+  <logger name="jdbc.resultsettable" additivity="false">
+    <level value="info" />
+    <appender-ref ref="jdbc-appender"/>
+  </logger>  
+  
   <!-- log connection open/close events and dump of all open connection numbers -->
   <logger name="jdbc.connection" additivity="false">
     <level value="fatal"/>
@@ -96,6 +105,8 @@
     <level value="debug"/>
     <appender-ref ref="stdout-appender"/>
   </logger>
+  
+  
 
   <!-- by default, log everything to the console with a level of WARN or higher -->
   <root>
